@@ -1,0 +1,21 @@
+
+services:
+      redis:
+        image: redis:latest
+        container_name: job-redis-container
+        volumes:
+          - job_redis_data:/data
+        ports:
+            - "6379:6379"
+        environment:
+          REDIS_PASSWORD: job_redis_containerForProdigiousDataFetching
+        networks:
+              - db
+        restart: unless-stopped
+
+networks:
+    db:
+      driver: bridge
+
+volumes:
+  job_redis_data:
