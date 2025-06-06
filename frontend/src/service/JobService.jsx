@@ -1,8 +1,8 @@
 
 const BaseURL = 'http://localhost:8080/api/v1/jobs'
 
-const getAllJobs = async(limit = null) => {
-    const url = limit ? `${BaseURL}/all?_limit=${limit}` : `${BaseURL}/all`
+const getAllJobs = async(limit) => {
+    const url = limit != null ? `${BaseURL}/all?_limit=${limit}` : `${BaseURL}/all`
     const res = await fetch(url)
     const data = await res.json()
     return data;
@@ -25,7 +25,7 @@ const getJobById = async (id) => {
     return data;
 };
 
-const updateJob = async (id, updatedJob) => {
+const updateJob = async (updatedJob, id) => {
   await fetch(`${BaseURL}/${id}`, {
     method: 'PUT',
     headers: {

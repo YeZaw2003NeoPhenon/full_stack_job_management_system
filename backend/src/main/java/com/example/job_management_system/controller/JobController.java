@@ -3,6 +3,7 @@ package com.example.job_management_system.controller;
 
 import com.example.job_management_system.dto.JobDto;
 import com.example.job_management_system.service.JobServiceImp;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class JobController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<JobDto> createJob(@RequestBody JobDto jobDto){
+    public ResponseEntity<JobDto> createJob(@RequestBody @Valid JobDto jobDto){
         JobDto createdJob = jobService.createJob(jobDto);
         logger.info("Job is created successfully by {}", jobDto.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(createdJob);
@@ -57,7 +58,7 @@ public class JobController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<JobDto> updateJob(@PathVariable Long id, @RequestBody JobDto jobDto){
+    public ResponseEntity<JobDto> updateJob(@PathVariable Long id,@Valid @RequestBody JobDto jobDto){
         JobDto updatedJob = jobService.updateJob(id, jobDto);
         logger.info("Job is updated successfully by {}", id);
         return ResponseEntity.status(HttpStatus.CREATED).body(updatedJob);

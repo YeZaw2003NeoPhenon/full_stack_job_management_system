@@ -1,22 +1,31 @@
 package com.example.job_management_system.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+
 public class JobDto {
 
     private Long id;
 
+    @NotBlank(message = "title must not be null")
     private String title;
 
+    @NotBlank(message = "type must not be null")
     private String type;
 
-
+    @NotBlank(message = "location must not be null")
     private String location;
 
-
+    @NotBlank(message = "description must not be null")
     private String description;
 
-
+    @NotBlank(message = "salary must not be null")
     private String salary;
 
+    @Valid
+    @NotNull(message = "company must not be null")
     private CompanyDto companyDto;
 
     public JobDto(){}

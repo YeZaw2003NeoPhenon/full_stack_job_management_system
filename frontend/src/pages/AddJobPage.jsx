@@ -48,8 +48,7 @@ const newJob = {
 
             <div className="mb-4">
               <label htmlFor="type" className="block text-gray-700 font-bold mb-2"
-                >Job Type</label
-              >
+                >Job Type</label>
               <select
                 id="type"
                 name="type"
@@ -159,8 +158,7 @@ const newJob = {
               <label
                 htmlFor="company_description"
                 className="block text-gray-700 font-bold mb-2"
-                >Company Description</label
-              >
+                >Company Description</label>
               <textarea
                 id="company_description"
                 name="company_description"
@@ -176,8 +174,7 @@ const newJob = {
               <label
                 htmlFor="contact_email"
                 className="block text-gray-700 font-bold mb-2"
-                >Contact Email</label
-              >
+                >Contact Email</label>
               <input
                 type="email"
                 id="contact_email"
@@ -193,8 +190,7 @@ const newJob = {
               <label
                 htmlFor="contact_phone"
                 className="block text-gray-700 font-bold mb-2"
-                >Contact Phone</label
-              >
+                >Contact Phone</label>
               <input
                 type="tel"
                 id="contact_phone"

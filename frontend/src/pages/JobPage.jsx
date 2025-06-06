@@ -4,6 +4,7 @@ import { FaArrowLeft, FaMapMarker} from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { getJobById } from "../service/JobService"
+
 const JobPage = ({deleteJob}) => {
         const id = useParams()
         const job = useLoaderData()
@@ -15,9 +16,8 @@ const JobPage = ({deleteJob}) => {
         return;
       }
       deleteJob(jobId)
+      toast.success('Job is deleted successfully')
      navigate('/jobs')
-     window.location.reload();
-     toast.success('Job is deleted successfully')
   }
   
   return (

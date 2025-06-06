@@ -1,10 +1,25 @@
 package com.example.job_management_system.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class CompanyDto {
+
     private Long id;
+
+    @NotBlank(message = "name must not be null")
     private String name;
+
+    @NotBlank(message = "description must not be null")
     private String description;
+
+    @NotBlank(message = "contactEmail must not be null")
+    @Email(message = "invalid email")
     private String contactEmail;
+
+    @NotBlank(message = "contactPhone must not be null")
     private String contactPhone;
 
     public CompanyDto(){}

@@ -4,6 +4,8 @@ import com.example.job_management_system.dto.CompanyDto;
 import com.example.job_management_system.dto.JobDto;
 import com.example.job_management_system.entity.Company;
 import com.example.job_management_system.entity.Job;
+import com.example.job_management_system.exception.CompanyNotFoundException;
+import com.example.job_management_system.exception.JobNotFoundException;
 import com.example.job_management_system.mapper.EntityConverter;
 import com.example.job_management_system.repository.CompanyRepository;
 import com.example.job_management_system.repository.JobRepository;
@@ -69,7 +71,7 @@ public class JobServiceImp implements JobService {
         Company company;
 
         if(companyDto.getId() != null ){
-            company = companyRepository.findById(companyDto.getId()).orElseThrow(() -> new IllegalArgumentException("Company not found"));
+            company = companyRepository.findById(companyDto.getId()).orElseThrow(() -> new CompanyNotFoundException("Company not found"));
         }
         else{
             company = companyEntityConverter.dtoToEntity(companyDto, Company.class);
@@ -99,13 +101,13 @@ public class JobServiceImp implements JobService {
                    }
                    return jobDto;
                 })
-                .orElseThrow(() -> new IllegalArgumentException("Job not found"));
+                .orElseThrow(() -> new JobNotFoundException("Job not found"));
     }
 
     @Override
     @CacheEvict(value = {"getAllJobs","getJobById"}, key = "#id", allEntries = true)
     public void deleteJob(Long id) {
-        Job job = jobRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Job not found"));
+        Job job = jobRepository.findById(id).orElseThrow(() -> new JobNotFoundException("Job not found"));
         Company company = job.getCompany();
         jobRepository.delete(job);
         if(company != null && company.getId() != null){
@@ -116,7 +118,7 @@ public class JobServiceImp implements JobService {
     @Override
     @CacheEvict(value = {"getAllJobs","getJobById"}, key = "#id", allEntries = true)
     public JobDto updateJob(Long id, JobDto jobDto) {
-        Job job = jobRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Job not found"));
+        Job job = jobRepository.findById(id).orElseThrow(() -> new JobNotFoundException("Job not found"));
         job.setTitle(jobDto.getTitle());
         job.setType(jobDto.getType());
         job.setLocation(jobDto.getLocation());

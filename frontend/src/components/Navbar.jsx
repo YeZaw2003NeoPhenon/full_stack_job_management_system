@@ -1,6 +1,7 @@
 import logo from '../assets/images/logo.png'
 import { NavLink } from 'react-router-dom';
-export const Navbar = () => {
+import LogoutButton from '../security/LogoutButton';
+export const Navbar = ({user,setUser}) => {
   const ActiveClass = ({isActive}) => isActive ? 'text-white bg-black hover:bg-gray-900 hover:text-white rounded-md px-3 py-2' : 
                             'text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
     return (
@@ -18,21 +19,22 @@ export const Navbar = () => {
                 src={logo}
                 alt="React Jobs"
               />
-              <span className="hidden md:block text-white text-2xl font-bold ml-2">Bolstered By React</span
-              >
+              <span className="hidden md:block text-white text-2xl font-bold ml-2">Bolstered By React</span>
             </NavLink>
             <div className="md:ml-auto">
               <div className="flex space-x-2">
                <NavLink to ="/" 
-               className = {ActiveClass} >Home</NavLink>
+               className = {ActiveClass}>Home</NavLink>
                 <NavLink
                   to ="/jobs"
                  className = {ActiveClass}
                   >Jobs</NavLink>
                 <NavLink
                   to ="/add-job"
-                 className={ActiveClass}
-                  >Add Job</NavLink>
+                 className={ActiveClass}>Add Job</NavLink>
+                 <div>
+                   {user && (<LogoutButton setUser={setUser}/>)}
+                 </div>
               </div>
             </div>
           </div>
