@@ -11,9 +11,9 @@
 - [Contributing](#contributing)
 
  ## Description
-  The Full Stack Job Management System is a web-based application designed to help users efficiently manage job postings and track application progress. The system supports seamless CRUD features such as job creation, editing, deletion, and categorization. Built with a full-stack architecture, the application demonstrates majestic interaction between frontend and backend components, database integration, and secure API handling.
-  This project serves as a comprehensive example of how modern web applications are structured, and it's suitable for portfolio presentation or as a foundation for job-related SaaS products. Furthermore, this project 
-  well-founded for Both mobile and desktop as it is highly responsive.
+  The Full Stack Job Management System is a web-based application designed to help users efficiently manage job postings and track application progress. The system supports seamless CRUD features such as job creation, editing, deletion, and categorization. Being built with a full-stack architecture, the application demonstrates majestic interaction between frontend and backend components, database integration, and secure API handling.
+  This project serves as a comprehensive example of how modern web applications are structured, and it's suitable for portfolio presentation or as a foundation for job-related SaaS products. Furthermore, as this project is fecilitously implemented with highly responsive designs, it is
+  well-founded for Both mobile and desktop.
 
   ## Features
 - Add, edit, view, and delete job records
