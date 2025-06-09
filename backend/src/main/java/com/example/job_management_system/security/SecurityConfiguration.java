@@ -1,7 +1,8 @@
 package com.example.job_management_system.security;
 
-
-import jakarta.servlet.http.HttpServletResponse;
+import com.example.job_management_system.security.user.AppUserServiceImp;
+import com.example.job_management_system.security.user.Role;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -9,12 +10,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -26,14 +22,23 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    private final AppUserServiceImp userDetailsService;
+
+    @Autowired
+    public SecurityConfiguration(AppUserServiceImp userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
              http
                 .csrf(csrfConfigurer -> csrfConfigurer.disable())
                  .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(request -> {
+                 .authorizeHttpRequests(request -> {
                     request.requestMatchers("/api/v1/jobs/**").permitAll()
                            .requestMatchers("/api/v1/auth/**").permitAll()
+                            .requestMatchers("/api/v1/users/create").permitAll()
+                            .requestMatchers("/api/v1/users/all").permitAll()
                            .anyRequest().authenticated();
                 })
                 .formLogin(login -> {
@@ -43,12 +48,12 @@ public class SecurityConfiguration {
                     .failureForwardUrl("/login?error=true")
                     .permitAll();
                 })
-                .logout(logout -> {
-                    logout.logoutUrl("/api/v1/auth/logout")
-                          .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_OK))
-                          .invalidateHttpSession(true)
-                          .deleteCookies("JSESSIONID");
-                })
+//                .logout(logout -> {
+//                    logout.logoutUrl("/api/v1/auth/logout").permitAll()
+//                          .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_OK))
+//                          .invalidateHttpSession(true)
+//                          .deleteCookies("JSESSIONID");
+//                })
                 .authenticationProvider(authenticationProvider())
                 .sessionManagement(session -> session
                         .maximumSessions(1)
@@ -62,30 +67,30 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.withUsername("Neo")
-                                .password(new BCryptPasswordEncoder().encode("neophenon!@#"))
-                                .authorities("ADMIN")
-                                .accountExpired(false)
-                                .accountLocked(false)
-                                .credentialsExpired(false)
-                                .build();
-
-        UserDetails user2 = User.withUsername("Neli")
-                                .password(new BCryptPasswordEncoder().encode("neophenon!@#"))
-                                .authorities("ADMIN")
-                                .accountExpired(false)
-                                .accountLocked(false)
-                                .credentialsExpired(false)
-                                .build();
-        return new InMemoryUserDetailsManager(user,user2);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        UserDetails user = User.withUsername("Neo")
+//                                .password(new BCryptPasswordEncoder().encode("neophenon!@#"))
+//                                .authorities("ADMIN")
+//                                .accountExpired(false)
+//                                .accountLocked(false)
+//                                .credentialsExpired(false)
+//                                .build();
+//
+//        UserDetails user2 = User.withUsername("Neli")
+//                                .password(new BCryptPasswordEncoder().encode("neophenon!@#"))
+//                                .authorities("ADMIN")
+//                                .accountExpired(false)
+//                                .accountLocked(false)
+//                                .credentialsExpired(false)
+//                                .build();
+//        return new InMemoryUserDetailsManager(user,user2);
+//    }
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService());
+        provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
