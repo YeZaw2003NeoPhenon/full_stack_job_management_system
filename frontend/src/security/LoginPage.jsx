@@ -2,15 +2,18 @@
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import { login, authMeUser} from '../service/authService'
+import { useNavigate } from 'react-router-dom'
 const LoginPage = ({onLogin}) => {
 
-    const[credentials, setCredentials] = useState({username : "", password : ""})
+    const[credentials, setCredentials] = useState({email : "", password : ""})
 
     const[error , setError] = useState(null)
 
+    const navigate = useNavigate()
+
     const handleLogin = async(e) => {
         e.preventDefault();
-        
+
      try{
         const res = await login(credentials)
         if(res.ok){
@@ -28,7 +31,9 @@ const LoginPage = ({onLogin}) => {
         setError("Login failed");
         toast.error('Log in fails!')
      }
-    }
+  }
+
+
   return (
 <div className="flex items-center justify-center min-h-screen bg-blue-50 px-4">
   <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-xl">
@@ -43,9 +48,9 @@ const LoginPage = ({onLogin}) => {
     <form onSubmit={handleLogin} className="space-y-6">
       <input
         type="text"
-        placeholder="Username"
-        value={credentials.username}
-        onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+        placeholder="Email"
+        value={credentials.email}
+        onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
         className="w-full px-5 py-3 border border-gray-300 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
       />
       <input
@@ -61,6 +66,15 @@ const LoginPage = ({onLogin}) => {
       >
         Login
       </button>
+
+       <div className="flex justify-center">
+    <button
+      type="button"
+      onClick={() => navigate('/user-create')}
+      className="mt-4 text-indigo-600 hover:underline text-sm">
+      Don’t have an account? Create one
+    </button>
+  </div>
     </form>
   </div>
 </div>

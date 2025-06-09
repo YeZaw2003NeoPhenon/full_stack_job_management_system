@@ -1,7 +1,6 @@
 
 const BaseURL = 'http://localhost:8080/api/v1/auth'
 
-
 const authMeUser = async() => {
         const res = await fetch('http://localhost:8080/api/v1/auth/me', {
                     credentials: 'include',
@@ -11,6 +10,7 @@ const authMeUser = async() => {
          }
         const data = await res.json()
         return data;
+       // return user principal
 }
 
 const login = async (credentials) => {
@@ -19,7 +19,10 @@ const login = async (credentials) => {
             headers: {
                  'Content-Type': 'application/x-www-form-urlencoded',
             },
-              body: new URLSearchParams(credentials),
+              body: new URLSearchParams({
+                username: credentials.email,
+                password: credentials.password
+              }),
               credentials: 'include',
         })
         return res;
