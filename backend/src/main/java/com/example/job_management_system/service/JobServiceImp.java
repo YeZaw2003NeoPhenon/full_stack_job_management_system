@@ -93,7 +93,7 @@ public class JobServiceImp implements JobService {
         return jobRepository.findJobWithCompanyById(id)
                 .map(job -> {
                     JobDto jobDto = jobEntityConverter.entityToDto(job, JobDto.class);
-                   Company company = job.getCompany();
+                     Company company = job.getCompany();
 
                    if(company != null){
                        CompanyDto companyDto = companyEntityConverter.entityToDto(company, CompanyDto.class);
@@ -147,6 +147,24 @@ public class JobServiceImp implements JobService {
 
         Job savedJob = jobRepository.save(job);
         return jobEntityConverter.entityToDto(savedJob,JobDto.class);
+    }
+
+    @Override
+    @Cacheable(value = "getAllJobs")
+    public List<JobDto> searchJobByParam(String query) {
+
+        return jobRepository.findJobByParam(query).stream()
+                .map(job -> {
+                    JobDto jobDto = jobEntityConverter.entityToDto(job, JobDto.class);
+                    Company company = job.getCompany();
+
+                    if(company != null){
+                        CompanyDto companyDto = companyEntityConverter.entityToDto(company, CompanyDto.class);
+                        jobDto.setCompanyDto(companyDto);
+                    }
+                    return jobDto;
+                })
+                .collect(Collectors.toList());
     }
 
 }

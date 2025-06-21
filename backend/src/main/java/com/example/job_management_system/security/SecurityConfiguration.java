@@ -32,7 +32,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
              http
-                .csrf(csrfConfigurer -> csrfConfigurer.disable())
+                 .csrf(csrfConfigurer -> csrfConfigurer.disable())
                  .cors(Customizer.withDefaults())
                  .authorizeHttpRequests(request -> {
                     request.requestMatchers("/api/v1/jobs/**").permitAll()
@@ -48,6 +48,7 @@ public class SecurityConfiguration {
                     .failureForwardUrl("/login?error=true")
                     .permitAll();
                 })
+//                     .httpBasic(Customizer.withDefaults())
 //                .logout(logout -> {
 //                    logout.logoutUrl("/api/v1/auth/logout").permitAll()
 //                          .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_OK))

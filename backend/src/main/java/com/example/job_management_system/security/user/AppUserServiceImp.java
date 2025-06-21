@@ -34,7 +34,7 @@ public class AppUserServiceImp implements UserDetailsService {
     }
 
     @Override
-    @Cacheable(value = "user", key = "#email")
+    @Cacheable(value = "allUsers", key = "#email")
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
       AppUser appUser = appUserRepository.findByEmail(email)
@@ -42,7 +42,7 @@ public class AppUserServiceImp implements UserDetailsService {
       return new AppUserDetail(appUser);
     }
 
-    @CacheEvict(value = "user", key = "#userRequest.email")
+    @CacheEvict(value = "allUsers", key = "#userRequest.email", allEntries = true)
     public UserRequest createUser(UserRequest userRequest){
         AppUser appUser = entityConverter.dtoToEntity(userRequest,AppUser.class);
 

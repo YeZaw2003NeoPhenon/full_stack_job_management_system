@@ -2,9 +2,6 @@ package com.example.job_management_system.security.user;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import lombok.Builder;
-
 @Entity
 @Table(name = "app_user")
 public class AppUser {
