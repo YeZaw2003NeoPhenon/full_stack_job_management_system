@@ -9,7 +9,7 @@ const JobPage = ({deleteJob}) => {
         const id = useParams()
         const job = useLoaderData()
         const navigate = useNavigate()
-        const company = job.companyDto
+        const company = job.companyDto ? job.companyDto : {} ;
     const OnDeleteClick = (jobId) => {
       const confirm = window.confirm('Are you sure you wanna delete')
       if(!confirm){
@@ -71,7 +71,7 @@ const JobPage = ({deleteJob}) => {
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-bold mb-6">Company Info</h3>
 
-              <h2 className="text-2xl">{company.name}</h2>
+              <h2 className="text-2xl">{company.name == null && "No Company Name"}</h2>
 
                <p className="my-2">
                 {company.description}
@@ -112,8 +112,8 @@ const JobPage = ({deleteJob}) => {
   )
 }
 const jobLoader = async({params}) => {
-    const data = getJobById(params.id)
-    return data
+    const res = await getJobById(params.id)
+    return res.data
 }
 
 export { JobPage as default, jobLoader}

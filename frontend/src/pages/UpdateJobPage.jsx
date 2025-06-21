@@ -34,8 +34,10 @@ const newJob = {
         contactPhone
     }
 }
-        UpdateJob(newJob, id)
+      const data =  UpdateJob(newJob, id)
         toast.success('Job is updated successfully')
+        console.log(data);
+        
         navigate(`/jobs/${job.id}`)
 
     }

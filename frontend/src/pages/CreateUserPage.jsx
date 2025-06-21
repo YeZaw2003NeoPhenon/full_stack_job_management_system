@@ -21,7 +21,8 @@ const CreateUserPage = () => {
       password,
       role
     }
-      createUser(newUser)
+     const jsonData = createUser(newUser)
+      console.log(jsonData);
       toast('User created successfully!')
       navigate('/jobs')
   

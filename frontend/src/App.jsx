@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import LoginPage from "./security/LoginPage";
 import { authMeUser } from "./service/authService";
 import CreateUserPage from "./pages/CreateUserPage";
+import Navbar from "./components/Navbar";
 const App = () => {
 
   const[user, setUser] = useState(null)
@@ -53,7 +54,6 @@ const App = () => {
      return;
   }
 
-  
   const RequiredAuth = ({children}) => {
     if(!user && !isLogin){
       return <LoginPage onLogin = {(loggedUser) => setUser(loggedUser)} />
@@ -67,14 +67,14 @@ const App = () => {
 
   const router = createBrowserRouter(
       createRoutesFromElements(
-      <Route path='/' element = {<MainLayout user={user} setUser={setUser}/>}>
-        <Route index element = {<RequiredAuth><HomePage/></RequiredAuth>}/>
+      <Route path='/' element = {<MainLayout/>}>
+        <Route index element = {<RequiredAuth><HomePage user = {user} setUser={setUser}/></RequiredAuth>}/>
         <Route path = '/jobs' element = {<RequiredAuth><JobsPage/></RequiredAuth>}/>
         <Route path = '/jobs/:id' element = {<RequiredAuth><JobPage deleteJob = {deleteJob}/></RequiredAuth>} loader = {jobLoader}/>
         <Route path = '/add-job' element = {<RequiredAuth><AddJobPage  addJobForm = {addJobForm}/></RequiredAuth>}/>
         <Route path = '/edit-job/:id' element = {<RequiredAuth><UpdateJobPage UpdateJob={UpdateJob}/></RequiredAuth>} loader = {jobLoader}/>
-        <Route path = '/user-create' element = {<CreateUserPage/>}></Route>
         <Route path = '*' element = {<NotFound/>}/>
+        <Route path = '/user-create' element = {<CreateUserPage/>}></Route>
       </Route>
     )
   )
