@@ -3,17 +3,21 @@ package com.example.job_management_system.controller;
 
 import com.example.job_management_system.dto.JobDto;
 import com.example.job_management_system.response.CustomResponse;
+import com.example.job_management_system.response.PageResponse;
 import com.example.job_management_system.service.JobServiceImp;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(originPatterns = "http://localhost:3000", allowCredentials = "true")
 @RestController
@@ -110,6 +114,27 @@ public class JobController {
 
         logger.info("Job is updated successfully by {}", id);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/with-pagination")
+    public ResponseEntity<CustomResponse<Object>> findJobsWithPagination(@RequestParam("page") int page , @RequestParam("size") int size, @RequestParam(name = "sortBy", required = false) String sortBy){
+
+       PageResponse<JobDto> jobPage = jobService.getAllJobsWithPagiantion(page,size,sortBy);
+
+        Map<String,Object> responseMap = new HashMap<>();
+
+        responseMap.put("CurrentPage",jobPage.getPage());
+        responseMap.put("TotalPages",jobPage.getTotalPages());
+        responseMap.put("TotalItems", jobPage.getTotalElements());
+        responseMap.put("Jobs", jobPage.getContent());
+
+        CustomResponse<Object> response = new CustomResponse.Builder<Object>()
+                .status(HttpStatus.OK.value())
+                .message("Page Of Jobs")
+                .data(responseMap)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

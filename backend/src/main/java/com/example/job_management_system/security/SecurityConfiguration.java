@@ -48,7 +48,6 @@ public class SecurityConfiguration {
                     .failureForwardUrl("/login?error=true")
                     .permitAll();
                 })
-//                     .httpBasic(Customizer.withDefaults())
 //                .logout(logout -> {
 //                    logout.logoutUrl("/api/v1/auth/logout").permitAll()
 //                          .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_OK))

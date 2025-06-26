@@ -33,6 +33,14 @@ public class CompanyDto {
         this.contactPhone = contactPhone;
     }
 
+    public CompanyDto(String name, String description, String contactEmail, String contactPhone) {
+        this.name = name;
+        this.description = description;
+        this.contactEmail = contactEmail;
+        this.contactPhone = contactPhone;
+    }
+
+
     public Long getId() {
         return id;
     }

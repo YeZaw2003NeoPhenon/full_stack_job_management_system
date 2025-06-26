@@ -13,6 +13,11 @@ public class CustomResponse<T>{
         this.data = data;
     }
 
+    public CustomResponse(String message, T data) {
+        this.message = message;
+        this.data = data;
+    }
+
     public int getStatus() {
         return status;
     }
@@ -41,6 +46,11 @@ public class CustomResponse<T>{
         private int status;
         private String message;
         private T data;
+
+//       public Builder(String message, T data){
+//            this.message = message;
+//            this.data = data;
+//        }
 
         public Builder<T> status(int status){
             this.status = status;

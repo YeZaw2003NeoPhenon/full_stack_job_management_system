@@ -9,9 +9,12 @@ import com.example.job_management_system.exception.JobNotFoundException;
 import com.example.job_management_system.mapper.EntityConverter;
 import com.example.job_management_system.repository.CompanyRepository;
 import com.example.job_management_system.repository.JobRepository;
+import com.example.job_management_system.response.PageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,7 +49,6 @@ public class JobServiceImp implements JobService {
                                              .stream()
                                              .map(job -> {
                                             JobDto jobDto = jobEntityConverter.entityToDto(job, JobDto.class);
-
                                                  Company company = job.getCompany();
                                                  // to either include the company datas
                                                  if(company != null){
@@ -90,7 +92,7 @@ public class JobServiceImp implements JobService {
     @Override
     @Cacheable(value = "getJobById",  key = "#id")
     public JobDto findJobById(Long id) {
-        return jobRepository.findJobWithCompanyById(id)
+        return jobRepository.findById(id)
                 .map(job -> {
                     JobDto jobDto = jobEntityConverter.entityToDto(job, JobDto.class);
                      Company company = job.getCompany();
@@ -165,6 +167,34 @@ public class JobServiceImp implements JobService {
                     return jobDto;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    // @Cacheable(value = "getAllJobs")
+    @Cacheable(value = "getAllJobs", key = "#page + '-' + #size + '-' + #sortBy")
+    public PageResponse<JobDto> getAllJobsWithPagiantion(int pageNum, int size, String sortBy) {
+
+       Pageable pageable = PageRequest.of(pageNum,size, Sort.by(sortBy).ascending());
+       Page<Job> jobPage = jobRepository.findAllJobsWithPagination(pageable);
+
+       List<JobDto> jobDtoList = jobPage.getContent().stream()
+               .map(job -> {
+                   JobDto jobDto = jobEntityConverter.entityToDto(job, JobDto.class);
+                   Company company = job.getCompany();
+                  if(company != null ) {
+                      CompanyDto companyDto = companyEntityConverter.entityToDto(company, CompanyDto.class);
+                      jobDto.setCompanyDto(companyDto);
+                  }
+                  else{
+                      CompanyDto companyDto = null;
+                      jobDto.setCompanyDto(null);
+                  }
+                  return jobDto;
+               })
+               .collect(Collectors.toList());
+
+        Page<JobDto> page = new PageImpl<>(jobDtoList,pageable,jobPage.getTotalElements());
+       return new PageResponse<>(page);
     }
 
 }
