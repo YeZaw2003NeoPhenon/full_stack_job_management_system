@@ -1,8 +1,7 @@
 package com.example.job_management_system.security.user;
 
-import com.example.job_management_system.config.UserMapper;
-import com.example.job_management_system.mapper.DataMapper;
 import com.example.job_management_system.mapper.EntityConverter;
+import com.example.job_management_system.mapper.UserRecordMapper;
 import com.example.job_management_system.security.user.dto.UserRecord;
 import com.example.job_management_system.security.user.dto.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +23,13 @@ public class AppUserServiceImp implements UserDetailsService {
 
     private final EntityConverter<AppUser, UserRequest> entityConverter;
 
-    private final DataMapper<AppUser , UserRecord> userMapper;
+    private final UserRecordMapper userRecordMapper;
 
     @Autowired
-    public AppUserServiceImp(AppUserRepository appUserRepository, EntityConverter<AppUser, UserRequest> entityConverter, DataMapper<AppUser, UserRecord> userMapper) {
+    public AppUserServiceImp(AppUserRepository appUserRepository, EntityConverter<AppUser, UserRequest> entityConverter, UserRecordMapper userRecordMapper) {
         this.appUserRepository = appUserRepository;
         this.entityConverter = entityConverter;
-        this.userMapper = userMapper;
+        this.userRecordMapper = userRecordMapper;
     }
 
     @Override
@@ -57,7 +56,7 @@ public class AppUserServiceImp implements UserDetailsService {
     public List<UserRecord> getAllUsers(){
         return appUserRepository.findAll()
                 .stream()
-                .map(userMapper)
+                .map(userRecordMapper)
                 .collect(Collectors.toList());
     }
 

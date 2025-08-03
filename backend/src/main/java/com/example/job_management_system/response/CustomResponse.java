@@ -13,11 +13,6 @@ public class CustomResponse<T>{
         this.data = data;
     }
 
-    public CustomResponse(String message, T data) {
-        this.message = message;
-        this.data = data;
-    }
-
     public int getStatus() {
         return status;
     }

@@ -2,6 +2,8 @@ package com.example.job_management_system.security.user;
 
 
 import jakarta.persistence.*;
+
+
 @Entity
 @Table(name = "app_user")
 public class AppUser {

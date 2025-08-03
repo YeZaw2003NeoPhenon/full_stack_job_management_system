@@ -1,20 +1,8 @@
 package com.example.job_management_system;
 
-import com.example.job_management_system.entity.Company;
-import com.example.job_management_system.entity.Job;
-import com.example.job_management_system.repository.CompanyRepository;
-import com.example.job_management_system.repository.JobRepository;
-import com.example.job_management_system.security.user.AppUser;
-import com.example.job_management_system.security.user.AppUserRepository;
-import com.example.job_management_system.security.user.Role;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.List;
 
 @SpringBootApplication
 public class JobManagementSystemApplication {

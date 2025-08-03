@@ -5,8 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
-
-//@JsonIgnoreProperties(ignoreUnknown = true)
 public class AppUserDetail implements UserDetails {
 
     private AppUser appUser;

@@ -92,7 +92,7 @@ public class JobServiceImp implements JobService {
     @Override
     @Cacheable(value = "getJobById",  key = "#id")
     public JobDto findJobById(Long id) {
-        return jobRepository.findById(id)
+        return jobRepository.findJobWithCompanyById(id)
                 .map(job -> {
                     JobDto jobDto = jobEntityConverter.entityToDto(job, JobDto.class);
                      Company company = job.getCompany();
