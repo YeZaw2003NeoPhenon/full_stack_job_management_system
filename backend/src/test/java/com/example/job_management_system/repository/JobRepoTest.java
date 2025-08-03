@@ -3,6 +3,7 @@ import com.example.job_management_system.entity.Company;
 import com.example.job_management_system.entity.Job;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,9 +15,10 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class JobRepoTest {
-    private final JobRepository jobRepository;
 
+    private final JobRepository jobRepository;
 
     @Autowired
     public JobRepoTest(JobRepository jobRepository) {
@@ -45,10 +47,13 @@ public class JobRepoTest {
     public void testFindJobWithCompanyId(){
        Optional<Job> optionalJob = jobRepository.findJobWithCompanyById(savedJob1.getId());
        assertThat(optionalJob).isPresent();
-       Job job = optionalJob.get();
-       assertThat(job.getTitle()).isEqualTo("Full Stack Java Developer");
-       assertThat(job.getCompany().getName()).isNotNull();
-       assertThat(job.getCompany().getName()).isEqualTo("LoliTech");
+
+       assertThat(optionalJob).hasValueSatisfying(
+               job -> {
+                   assertThat(job.getTitle()).isEqualTo("Full Stack Java Developer");
+                   assertThat(job.getCompany()).isNotNull();
+                   assertThat(job.getCompany().getName()).isEqualTo("LoliTech");
+               });
     }
 
     @Test
