@@ -46,18 +46,18 @@ public class JobServiceImp implements JobService {
     public List<JobDto> getAllJobs() {
 
        return jobRepository.findAll()
-                                             .stream()
-                                             .map(job -> {
-                                            JobDto jobDto = jobEntityConverter.entityToDto(job, JobDto.class);
-                                                 Company company = job.getCompany();
-                                                 // to either include the company datas
-                                                 if(company != null){
-                                                     CompanyDto companyDto = companyEntityConverter.entityToDto(company, CompanyDto.class);
-                                                     jobDto.setCompanyDto(companyDto);
-                                                 }
-                                                 return jobDto;
-                                             })
-                                             .collect(Collectors.toList());
+                           .stream()
+                           .map(job -> {
+                               JobDto jobDto = jobEntityConverter.entityToDto(job, JobDto.class);
+                               Company company = job.getCompany();
+                               // to either include the company datas
+                               if(company != null){
+                                   CompanyDto companyDto = companyEntityConverter.entityToDto(company, CompanyDto.class);
+                                   jobDto.setCompanyDto(companyDto);
+                               }
+                               return jobDto;
+                           })
+                           .collect(Collectors.toList());
     }
 
     @Override
@@ -72,7 +72,7 @@ public class JobServiceImp implements JobService {
         // check if the company already exists, then no need to create new company
         Company company;
 
-        if(companyDto.getId() != null ){
+        if(companyDto.getId() != null){
             company = companyRepository.findById(companyDto.getId()).orElseThrow(() -> new CompanyNotFoundException("Company not found"));
         }
         else{
@@ -112,6 +112,7 @@ public class JobServiceImp implements JobService {
         Job job = jobRepository.findById(id).orElseThrow(() -> new JobNotFoundException("Job not found"));
         Company company = job.getCompany();
         jobRepository.delete(job);
+
         if(company != null && company.getId() != null){
             companyRepository.deleteById(company.getId());
         }
@@ -129,14 +130,15 @@ public class JobServiceImp implements JobService {
 
         CompanyDto companyDto = jobDto.getCompanyDto();
 
+        // if the companyDto is not null, means we included company infos to update
         if(companyDto != null){
-
             Company company = job.getCompany();
 
             // if the job had previously no company
             if(company == null){
                 company = companyEntityConverter.dtoToEntity(companyDto, Company.class);
             }
+            // else job had company// then we update those fields
             else{
                 company.setName(companyDto.getName());
                 company.setDescription(companyDto.getDescription());

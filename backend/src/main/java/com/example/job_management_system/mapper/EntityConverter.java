@@ -21,4 +21,5 @@ public class EntityConverter<T,D>{
     public T dtoToEntity(D dto , Class<T> entityClass){
         return modelMapper.map(dto,entityClass);
     }
+
 }

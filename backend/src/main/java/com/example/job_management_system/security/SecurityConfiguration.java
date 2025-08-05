@@ -1,13 +1,14 @@
 package com.example.job_management_system.security;
 
 import com.example.job_management_system.security.user.AppUserServiceImp;
-import com.example.job_management_system.security.user.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,8 +38,8 @@ public class SecurityConfiguration {
                  .authorizeHttpRequests(request -> {
                     request.requestMatchers("/api/v1/jobs/**").permitAll()
                            .requestMatchers("/api/v1/auth/**").permitAll()
-                            .requestMatchers("/api/v1/users/create").permitAll()
-                            .requestMatchers("/api/v1/users/all").permitAll()
+                           .requestMatchers("/api/v1/users/create").permitAll()
+                           .requestMatchers("/api/v1/users/all").permitAll()
                            .anyRequest().authenticated();
                 })
                 .formLogin(login -> {
