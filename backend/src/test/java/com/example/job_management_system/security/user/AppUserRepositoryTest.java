@@ -36,9 +36,10 @@ class AppUserRepositoryTest {
 
     @Test
     public void testFindUserByEmail(){
-        String email = "neo@gmail.com";
+       String email = "neo@gmail.com";
        Optional<AppUser> appUser =  appUserRepository.findByEmail(email);
 
+       assertThat(appUser).isPresent();
        assertThat(appUser).hasValueSatisfying( user -> {
               assertThat(user.getId()).isEqualTo(2L);
               assertThat(user.getUsername()).isEqualTo("Neo");

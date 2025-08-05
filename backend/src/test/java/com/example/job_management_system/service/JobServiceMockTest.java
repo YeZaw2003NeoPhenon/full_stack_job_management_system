@@ -5,6 +5,7 @@ import com.example.job_management_system.entity.Company;
 import com.example.job_management_system.entity.Job;
 import com.example.job_management_system.exception.JobNotFoundException;
 import com.example.job_management_system.mapper.EntityConverter;
+import com.example.job_management_system.repository.CompanyRepository;
 import com.example.job_management_system.repository.JobRepository;
 import com.example.job_management_system.response.PageResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,9 +34,11 @@ public class JobServiceMockTest {
 
     @Mock
     private EntityConverter<Job,JobDto> jobEntityConverter;
-
     @InjectMocks
     private JobServiceImp jobServiceImp; // service instance for under the test
+
+    @Mock
+    private  CompanyRepository companyRepository;
 
     private Job job;
     private JobDto jobDto;
@@ -46,7 +49,66 @@ public class JobServiceMockTest {
          company = new Company(1L,"LoliTech","blash blash...", "test@gmail.com","09999999999");
          job = new Job(1L,"Full Stack Java Developer", "FullStack","Remote","blash blash","50000$", company);
 
-        jobDto = new JobDto(job.getId(), job.getTitle(), job.getType(), job.getLocation(), job.getDescription(), job.getSalary(),null);
+         jobDto = new JobDto(job.getId(), job.getTitle(), job.getType(), job.getLocation(), job.getDescription(), job.getSalary(),null);
+    }
+
+    @Test
+    void shouldCreateJobWithExistingCompany() {
+        when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
+
+        when(jobEntityConverter.dtoToEntity(any(JobDto.class), eq(Job.class))).thenReturn(job);
+        when(jobRepository.save(any(Job.class))).thenReturn(job);
+        when(jobEntityConverter.entityToDto(any(Job.class), eq(JobDto.class))).thenReturn(jobDto);
+
+        JobDto createdJob = jobServiceImp.createJob(jobDto);
+
+        assertThat(createdJob.getTitle()).isEqualTo("Full Stack Java Developer");
+        assertThat(createdJob.getCompanyDto().getName()).isEqualTo("LoliTech");
+
+        verify(companyRepository, times(1)).findById(1L);
+        verify(jobRepository, times(1)).save(job);
+    }
+
+    @Test
+    void shouldUpdateJob(){
+        when(jobRepository.findById(1L)).thenReturn(Optional.of(job));
+
+        when(jobEntityConverter.entityToDto(any(Job.class), eq(JobDto.class))).thenAnswer(invocation -> {
+            Job job = invocation.getArgument(0);
+            JobDto dto = new JobDto();
+            dto.setTitle(job.getTitle());
+            dto.setType(job.getType());
+            dto.setLocation(job.getLocation());
+            dto.setSalary(job.getSalary());
+            return dto;
+        });
+
+        when(jobRepository.save(any(Job.class))).thenReturn(job);
+
+        JobDto updatedJobDto = new JobDto();
+
+        updatedJobDto.setTitle("Updated Job Title");
+        updatedJobDto.setType("FullStack");
+        updatedJobDto.setLocation("Remote");
+        updatedJobDto.setDescription("Updated Description");
+        updatedJobDto.setSalary("60000$");
+
+        JobDto updatedJob = jobServiceImp.updateJob(1L, updatedJobDto);
+        assertThat(updatedJob.getTitle()).isEqualTo("Updated Job Title");
+        assertThat(updatedJob.getType()).isEqualTo("FullStack");
+        assertThat(updatedJob.getLocation()).isEqualTo("Remote");
+
+        verify(jobRepository, times(1)).findById(1L);
+        verify(jobRepository, times(1)).save(job);
+    }
+
+    @Test
+    void testDeleteJob(){
+        when(jobRepository.findById(1L)).thenReturn(Optional.of(job));
+        jobServiceImp.deleteJob(1L);
+
+        verify(jobRepository, times(1)).findById(1L);
+        verify(jobRepository, times(1)).delete(job);
     }
 
     @Test
@@ -68,12 +130,11 @@ public class JobServiceMockTest {
 
     @Test
     void testFindJobById() {
-
-        // prepare test mock behavior
         when(jobEntityConverter.entityToDto(any(Job.class), eq(JobDto.class))).thenReturn(jobDto);
         when(jobRepository.findJobWithCompanyById(1L)).thenReturn(Optional.of(job));
 
         JobDto searchedJob = jobServiceImp.findJobById(1L);
+
         assertThat(searchedJob).isNotNull();
         assertThat(searchedJob.getTitle()).isEqualTo("Full Stack Java Developer");
         assertThat(searchedJob.getType()).isEqualTo("FullStack");
